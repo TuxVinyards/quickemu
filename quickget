@@ -1726,6 +1726,7 @@ function get_bunsenlabs() {
 }
 
 function get_cachyos() {
+    local EDITION="${1:-}"
     local URL="https://mirror.cachyos.org/ISO/${EDITION}/"
     local REL=$(web_pipe "${URL}" | grep -Po '(?<=">)[0-9]+(?=/</a>)' | sort -ru | tail -n 1)
     local ISO="cachyos-${EDITION}-linux-${REL}.iso"
