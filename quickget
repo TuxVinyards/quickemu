@@ -559,8 +559,7 @@ function releases_archlinux() {
 }
 
 function releases_arcolinux() {
-    #shellcheck disable=SC2046,SC2005
-    echo $(web_pipe "https://mirror.accum.se/mirror/arcolinux.info/iso/" | grep -o -E -e "v[[:digit:]]{2}.[[:digit:]]{2}.[[:digit:]]{2}" | sort -ru | head -n 5)
+    floatversion -M 5 -s "$(curl -sf "https://ant.seedhost.eu/arcolinux/iso/")"
 }
 
 function editions_arcolinux() {
@@ -1623,8 +1622,8 @@ function get_arcolinux() {
     local HASH=""
     local ISO=""
     local URL=""
-    URL="https://mirror.accum.se/mirror/arcolinux.info/iso/${RELEASE}"
-    ISO="arco${EDITION}-${RELEASE}-x86_64.iso"
+    URL="https://ant.seedhost.eu/arcolinux/iso/v${RELEASE}"
+    ISO="arco${EDITION}-v${RELEASE}-x86_64.iso"
     HASH=$(web_pipe "${URL}/${ISO}.sha256" | cut -d' ' -f1)
     echo "${URL}/${ISO} ${HASH}"
 }
