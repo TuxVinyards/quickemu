@@ -3711,7 +3711,9 @@ if [ -n "${2}" ]; then
             exit 1
         fi
         handle_missing
-        VM_PATH="${OS}-${RELEASE}-${EDITION}"
+        if [[ $RELEASE == "latest" ]]; then VM_PATH="${OS}-${EDITION}"
+        else VM_PATH="${OS}-${RELEASE}-${EDITION}"
+        fi
         create_vm "$("get_${OS}" "${EDITION}")"
     elif [ "${OS}" == "macos" ]; then
         # macOS doesn't use create_vm()
