@@ -545,7 +545,7 @@ function editions_android() {
 }
 
 function releases_antix() {
-    echo 23.1 23 22 21
+    floatversion -M 3 -qs "$(web_pipe "https://sourceforge.net/projects/antix-linux/files/Final" | grep -s released )"
 }
 
 function editions_antix() {
