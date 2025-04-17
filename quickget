@@ -531,7 +531,7 @@ function editions_alma() {
 }
 
 function releases_alpine() {
-    floatversion -M 5 -s "$(web_pipe "https://dl-cdn.alpinelinux.org/alpine/")" 2>/dev/null
+    floatversion -M 5 -qs "$(web_pipe "https://dl-cdn.alpinelinux.org/alpine/" 2>/dev/null)" 
 }
 
 function releases_android() {
@@ -559,7 +559,7 @@ function releases_archlinux() {
 }
 
 function releases_arcolinux() {
-    floatversion -M 5 -s "$(curl -sf "https://ant.seedhost.eu/arcolinux/iso/")" 2>/dev/null
+    floatversion -M 5 -qs "$(curl -sf "https://ant.seedhost.eu/arcolinux/iso/" 2>/dev/null)"
 }
 
 function editions_arcolinux() {
@@ -610,7 +610,7 @@ function releases_blendos() {
 }
 
 function releases_bodhi() {
-    floatversion -M 3 -s "$(web_pipe "https://sourceforge.net/projects/bodhilinux/files/" | grep -s 'class="name')" 2>/dev/null
+    floatversion -M 3 -qs "$(web_pipe "https://sourceforge.net/projects/bodhilinux/files/" | grep -s 'class="name')"
 }
 
 function editions_bodhi() {
@@ -707,7 +707,7 @@ function releases_elementary() {
 }
 
 function releases_endeavouros() {
-    floatversion -s -M 4 "$(web_pipe "https://mirrors.gigenet.com/endeavouros/iso/" | grep href | grep iso)" 2>/dev/null
+    floatversion -qs -M 4 "$(web_pipe "https://mirrors.gigenet.com/endeavouros/iso/" | grep -s href | grep -s iso)"
 }
 
 function releases_endless() {
@@ -805,7 +805,7 @@ function editions_kolibrios() {
 }
 
 function releases_linuxlite() {
-    floatversion -M 3 -s "$(web_pipe "https://sourceforge.net/projects/linux-lite/files/" | grep 'class="name')" 2>/dev/null
+    floatversion -M 3 -qs "$(web_pipe "https://sourceforge.net/projects/linux-lite/files/" | grep -s 'class="name')"
 }
 
 function releases_linuxmint() {
@@ -910,7 +910,7 @@ function releases_oraclelinux() {
 }
 
 function releases_parrotsec() {
-   web_pipe "https://download.parrot.sh/parrot/iso/" | grep href | fv -s -M 3
+  floatversion -qs -M 3  "$(web_pipe "https://download.parrot.sh/parrot/iso/" | grep -s href)" 
 }
 
 function editions_parrotsec() {
@@ -950,7 +950,7 @@ function editions_primtux() {
 }
 
 function releases_proxmox-ve() {
-    floatversion -M 3 -s "$(web_pipe "https://enterprise.proxmox.com/iso/" | grep proxmox-ve)" 2>/dev/null
+    floatversion -M 3 -qs "$(web_pipe "https://enterprise.proxmox.com/iso/" | grep -s proxmox-ve)"
 }
 
 function releases_pureos() {
@@ -1051,7 +1051,7 @@ function editions_tinycore() {
 }
 
 function releases_trisquel() {
-    floatversion -M 4 -s "$(web_pipe "https://mirrors.ocf.berkeley.edu/trisquel-images/" | grep 'amd64.iso' | tr '"' '\n' | grep tris)" 2>/dev/null
+    floatversion -M 4 -qs "$(web_pipe "https://mirrors.ocf.berkeley.edu/trisquel-images/" | grep -s 'amd64.iso' | tr '"' '\n' | grep -s tris)"
 }
 
 function editions_trisquel() {
@@ -2516,7 +2516,7 @@ function get_sparkylinux() {
 function get_spirallinux() {
     local HASH=""
     local LATEST=""
-    LATEST="$(floatversion -M "$(curl --disable -sLf "https://sourceforge.net/projects/spirallinux/files/" | grep -s 'class="name')" 2>/dev/null)"
+    LATEST="$(floatversion -M -qs "$(curl --disable -sLf "https://sourceforge.net/projects/spirallinux/files/" | grep -s 'class="name')")"
     local ISO="SpiralLinux_${EDITION}_${LATEST}_x86-64.iso"
     local URL="https://sourceforge.net/projects/spirallinux/files/${LATEST}"
     HASH=$(web_pipe 'https://sourceforge.net/projects/spirallinux/rss?path=/' | grep "${ISO}" | grep 'md5' | cut -d'<' -f3 | cut -d'>' -f2)
