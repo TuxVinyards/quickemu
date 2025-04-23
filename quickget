@@ -1867,6 +1867,7 @@ function get_fedora() {
     local URL=""
     local VARIANT=""
     case ${EDITION} in
+        KDE) if [[ $RELEASE -ge 42 ]]; then VARIANT="${EDITION}"; else VARIANT="Spins"; fi ;;
         Server|Kinoite|Onyx|Silverblue|Sericea|Workstation) VARIANT="${EDITION}";;
         *) VARIANT="Spins";;
     esac
