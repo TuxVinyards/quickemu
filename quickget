@@ -3669,7 +3669,7 @@ case "${1}" in
     --version|-version)
         #WHERE=$(dirname "${BASH_SOURCE[0]}")
         #"${WHERE}/quickemu" --version
-        echo "FS 4.9.8.03"
+        echo "FS 4.9.8.04"
         exit 0;;
     --help|-help|--h|-h)
         help_message
