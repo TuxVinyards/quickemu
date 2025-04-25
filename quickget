@@ -517,7 +517,6 @@ function os_support() {
     ubuntustudio \
     vanillaos \
     void \
-    vxlinux \
     windows \
     windows-server \
     xubuntu \
@@ -1130,6 +1129,7 @@ function editions_void() {
 }
 
 function releases_vxlinux() {
+    # apr 2025 de-listed as unmaintained
     #shellcheck disable=SC2046,SC2005
     echo $(web_pipe "https://github.com/VX-Linux/main/releases/latest" | grep -o -e 'releases/tag/[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]' | sort -u | cut -d'/' -f 3)
 }
