@@ -912,7 +912,10 @@ function releases_oraclelinux() {
 }
 
 function releases_parrotsec() {
-  floatversion -qs -M 3  "$(web_pipe "https://download.parrot.sh/parrot/iso/" | grep -s href)"
+  #floatversion -qs -M 3  "$(web_pipe "https://download.parrot.sh/parrot/iso/" | grep -s href)"
+  # May 2025 > 'downloads' still works at site but reflect changes for now (?)
+  # upstream commit #1643 is incomplete > also needs changes to get_parrotsec ...
+  floatversion -qs -M 3  "$(web_pipe "https://deb.parrot.sh/parrot/iso/" | grep -s href)"
 }
 
 function editions_parrotsec() {
@@ -2337,7 +2340,8 @@ function get_parrotsec() {
     local ISO=""
     local URL=""
     ISO="Parrot-${EDITION}-${RELEASE}_amd64.iso"
-    URL="https://download.parrot.sh/parrot/iso/${RELEASE}"
+    #URL="https://download.parrot.sh/parrot/iso/${RELEASE}"
+    URL="https://deb.parrot.sh/parrot/iso/${RELEASE}"
     HASH="$(web_pipe "${URL}/signed-hashes.txt" | grep "${ISO}" | cut -d' ' -f1)"
     echo "${URL}/${ISO} ${HASH}"
 }
