@@ -2065,6 +2065,7 @@ fi
 
 QEMU_VER_LONG=$(${QEMU_IMG} --version | head -n 1 | awk '{print $3}')
 # strip patch version and remove dots. 6.0.0 => 60 / 10.0.0 => 100
+# shellcheck disable=SC2001
 QEMU_VER_SHORT=$(echo "${QEMU_VER_LONG%.*}" | sed 's/\.//g')
 if [ "${QEMU_VER_SHORT}" -lt 60 ]; then
     echo "ERROR! QEMU 6.0.0 or newer is required, detected ${QEMU_VER_LONG}."
