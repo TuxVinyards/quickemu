@@ -897,13 +897,13 @@ function releases_nitrux() {
 }
 
 function releases_nixos() {
-    # Lists unstable plus the two most recent releases
+    # Lists unstable plus the most recent release
     #shellcheck disable=SC2046
-    echo unstable $(web_pipe "https://nix-channels.s3.amazonaws.com/?delimiter=/" | grep -o -E 'nixos-[[:digit:]]+\.[[:digit:]]+' | cut -d- -f2 | sort -nru | head -n +2)
+    echo unstable $(web_pipe "https://nix-channels.s3.amazonaws.com/?delimiter=/" | grep -o -E 'nixos-[[:digit:]]+\.[[:digit:]]+' | cut -d- -f2 | sort -nru | head -n +1)
 }
 
 function editions_nixos() {
-    echo "minimal plasma gnome"
+    echo "minimal graphical"
 }
 
 function releases_nobara() {
@@ -2326,13 +2326,12 @@ function get_nitrux() {
 
 function get_nixos() {
     local HASH=""
-    # Adapt the plasma edition according to the NixOS release
+    # NixOS "gnome" and "plasma" ISOs are unified as "graphical" since 25.05
+    # https://github.com/NixOS/nixpkgs/pull/355893
     case "${EDITION}" in
-        plasma)
-            if [ "${RELEASE}" == "23.11" ]; then
-                EDITION+="5"
-            else
-                EDITION+="6"
+        plasma6|gnome)
+            if [[ "${RELEASE}" == "25.05" || "${RELEASE}" == "unstable" ]]; then
+                EDITION="graphical"
             fi
             ;;
     esac
