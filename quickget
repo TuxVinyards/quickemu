@@ -1962,9 +1962,6 @@ function get_freedos() {
         1.4) URL="${BASE_URL}"
              ISO="FD14-LiveCD.zip"
              HASH=$(web_pipe "${URL}/verify.txt" | grep -A 8 "sha256sum" | grep "${ISO}" | cut -d' ' -f1);;
-        1.4) ISO="FD14-LiveCD.zip"
-             URL="${URL/'/official'/}"
-             HASH=$(web_pipe "${URL}/verify.txt" | grep -A 8 "sha256sum" | grep "${ISO}" | cut -d' ' -f1);;
     esac
     echo "${URL}/${ISO} ${HASH}"
 }
