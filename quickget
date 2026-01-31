@@ -1310,6 +1310,7 @@ function check_hash() {
         iso="${VM_PATH}/${1}"
     fi
     hash="${2}"
+    hash="$(tr -cd '[:graph:]' <<< "$hash")"
 
     # Check for algorithm prefix (e.g., "sha256:abc123..." or "b2sum:abc123...")
     if [[ "${hash}" == *":"* ]]; then
