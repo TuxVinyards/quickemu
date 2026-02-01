@@ -7,7 +7,7 @@
 # For qqX use with C.UTF-8 locale, not:  export LC_ALL=C
 
 # This section enables testing via './quickget --check distroname' from a terminal opened in the built-ins folder:
-if [[ -e "$(pwd)/qqX_quickget_mods" ]]; then
+if [[ -e "$(pwd)/qqX_quickGet_mods" ]]; then
     if [[ $(pgrep -aAi qqX 2>/dev/null) ]] ; then
         printf "\n  qqX running elsewhere ... \n\n" ; exit 1
     else
@@ -3961,7 +3961,7 @@ fi
 
 mapfile -t -d':' PathArr <<< "$PATH"
 for QGP in "${PathArr[@]}"; do
-    [[ -e "$QGP/qqX_quickget_mods" ]] && source "$QGP/qqX_quickget_mods" && break
+    [[ -e "$QGP/qqX_quickGet_mods" ]] && source "$QGP/qqX_quickGet_mods" && break
 done
 
 #TODO: Deprecate `list`, `list_csv`, and `list_json` in favor of `--list`, `--list-csv`, and `--list-json`
@@ -4013,7 +4013,7 @@ case "${1}" in
         fi
         exit 0;;
     --version|-version)
-        ## NB The matching 'qqX_quickget_mods' file is required
+        ## NB The matching 'qqX_quickGet_mods' file is required
         # when moving FreeBird/Freespirit builtins ##
         echo "4.99.01"
         exit 0;;
