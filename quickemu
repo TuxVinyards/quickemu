@@ -2133,8 +2133,6 @@ function vm_boot() {
             args+=(-drive media=cdrom,index=1,file="${fixed_iso}")
         fi
     elif [ -n "${fixed_iso}" ]; then
-        # shellcheck disable=SC2054
-        args+=(-drive media=cdrom,index=1,file="${fixed_iso}")
         if [ "${ARCH_VM}" == "aarch64" ]; then
             # ARM64: attach second ISO to virtio-scsi controller
             # shellcheck disable=SC2054
