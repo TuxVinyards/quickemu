@@ -29,6 +29,23 @@ elif [[ "$PATH" != *'qqX'* ]]; then
     exit 1
 fi
 
+# Detect host OS for checksum tool compatibility
+HOST_OS=$(uname -s)
+
+# Default architecture based on host
+HOST_ARCH=$(uname -m)
+case "${HOST_ARCH}" in
+    aarch64|arm64) ARCH="arm64";;
+    *) ARCH="amd64";;
+esac
+
+function arch_suffix() {
+    # Return architecture suffix for foreign architectures, empty for native
+    if [ "${ARCH}" != "${NORMALISED_HOST_ARCH}" ]; then
+        echo "-${ARCH}"
+    fi
+}
+
 function cleanup() {
     if [ -n "$(jobs -p)" ]; then
         kill "$(jobs -p)" 2>/dev/null
