@@ -2561,11 +2561,13 @@ function get_nixos() {
 }
 
 function get_nobara() {
-    local HASH= ; local URL= ; local IsoRef= ; local IsoFront= ; local IsoTail=
-    IsoRef="$(web_pipe "https://nobaraproject.org/download-nobara/" | tr '/' '\n' | grep 'iso"' | cut -d'"' -f1 | grep -v NV | grep Official )"
-    IsoFront="$(cut -d- -f1,2 <<< "$IsoRef")"
-    IsoTail="$(cut -d- -f4- <<< "$IsoRef")"
-    URL="https://nobara-images.nobaraproject.org/${IsoFront}-${EDITION}-${IsoTail}"
+    local HASH= ; local URL= ; local IsoRef=
+    if [[ "$EDITION" == *NV* ]]; then
+        IsoRef="$(web_pipe "https://nobaraproject.org/download-nobara/" | tr '/' '\n' | grep 'iso"' | cut -d'"' -f1 | grep "$EDITION" )"
+    else
+        IsoRef="$(web_pipe "https://nobaraproject.org/download-nobara/" | tr '/' '\n' | grep 'iso"' | cut -d'"' -f1 | grep -v NV | grep "$EDITION")"
+    fi
+    URL="https://nobara-images.nobaraproject.org/${IsoRef}"
     HASH="$(web_pipe "${URL}.sha256sum" | cut -d' ' -f1)"
     echo "${URL} ${HASH}"
 }
