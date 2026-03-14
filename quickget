@@ -1246,8 +1246,8 @@ function arch_debian() {
 
 function arch_fedora() {
     case "${EDITION}" in
-        Server) echo "amd64 arm64";;
-        *) echo "amd64";;
+        Onyx) echo "amd64";;
+        *) echo "amd64 arm64";;
     esac
 }
 
@@ -1685,8 +1685,8 @@ function make_vm_config() {
         cat << EOF > "${CONF_FILE}"
 #!${QUICKEMU} --vm
 guest_os="${GUEST}"
-${ARCH_LINE:+${ARCH_LINE}
-}disk_img="${VM_PATH}/disk.qcow2"
+${ARCH_LINE:+${ARCH_LINE}}
+disk_img="${VM_PATH}/disk.qcow2"
 ${IMAGE_TYPE}="${VM_PATH}/${IMAGE_FILE}"
 EOF
         echo " - Setting ${CONF_FILE} executable"
@@ -1697,76 +1697,83 @@ EOF
         if [[ $(type -t "mods_config_${OS}") == function ]]; then
             "mods_config_${OS}"
         else
-            # OS specific tweaks
-            case ${OS} in
-                alma|athenaos|centos-stream|endless|garuda|gentoo|kali|nixos|oraclelinux|popos|rockylinux)
-                    echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
-                openindiana)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-                    echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
-                batocera)
-                    echo "disk_size=\"8G\"" >> "${CONF_FILE}";;
-                bazzite)
-                    echo "disk_size=\"64G\"" >> "${CONF_FILE}";;
-                dragonflybsd|haiku|openbsd|netbsd|slackware|slax|tails|tinycore)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}";;
-                deepin)
-                    echo "disk_size=\"64G\"" >> "${CONF_FILE}"
-                    echo "ram=\"4G\"" >> "${CONF_FILE}"
-                    ;;
-                freedos)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-                    echo "disk_size=\"4G\"" >> "${CONF_FILE}"
-                    echo "ram=\"256M\"" >> "${CONF_FILE}"
-                    ;;
-                kolibrios)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-                    echo "disk_size=\"2G\"" >> "${CONF_FILE}"
-                    echo "ram=\"128M\"" >> "${CONF_FILE}"
-                    ;;
-                slint)
-                    echo "disk_size=\"50G\"" >> "${CONF_FILE}"
-                    ;;
-                slitaz)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-                    echo "disk_size=\"4G\"" >> "${CONF_FILE}"
-                    echo "ram=\"512M\"" >> "${CONF_FILE}"
-                    ;;
-                ubuntu-server)
-                    # 22.04+ fails on LVM build if disk size is < 10G
-                    # 22.04.1 fails on auto-install if TPM is disabled
-                    echo "disk_size=\"10G\"" >> "${CONF_FILE}"
-                    echo "ram=\"4G\"" >> "${CONF_FILE}"
-                    if [[ "${RELEASE}" == *"22.04"* ]]; then
-                        echo "tpm=\"on\"" >> "${CONF_FILE}"
-                    fi
-                    ;;
-                vanillaos)
-                    ## Minimum is 50G for abroot, but a 64GB is allocated to give some headroom
-                    echo "disk_size=\"64G\"" >> "${CONF_FILE}"
-                    ;;
-                zorin)
-                    case ${EDITION} in
-                        education64|edulite64) echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
-                    esac;;
-                reactos)
-                    echo "boot=\"legacy\"" >> "${CONF_FILE}"
-                    echo "disk_size=\"12G\"" >> "${CONF_FILE}"
-                    echo "ram=\"2048M\"" >> "${CONF_FILE}"
-                    ;;
-                macos)
-                    echo "disk_size=\"128G\"" >> "${CONF_FILE}"
-                    echo "macos_release=\"${RELEASE}\"" >> "${CONF_FILE}"
-                    # https://github.com/quickemu-project/quickemu/issues/438
-                    if [ "${RELEASE}" == "monterey" ]; then
-                        echo "cpu_cores=2" >> "${CONF_FILE}"
-                    fi
-                    ;;
-                proxmox-ve)
-                    echo "disk_size=\"20G\"" >> "${CONF_FILE}"
-                    echo "ram=\"4G\"" >> "${CONF_FILE}"
-                    ;;
-            esac
+        # OS specific tweaks
+        case ${OS} in
+            alma|centos-stream|endless|garuda|gentoo|kali|nixos|oraclelinux|popos|rockylinux)
+                echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
+            openindiana)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}"
+                echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
+            batocera)
+                echo "disk_size=\"8G\"" >> "${CONF_FILE}";;
+            bazzite)
+                echo "disk_size=\"64G\"" >> "${CONF_FILE}";;
+            dragonflybsd|haiku|openbsd|netbsd|slackware|slax|tinycore)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}";;
+            deepin)
+                echo "disk_size=\"64G\"" >> "${CONF_FILE}"
+                echo "ram=\"4G\"" >> "${CONF_FILE}"
+                ;;
+            freedos)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}"
+                echo "disk_size=\"4G\"" >> "${CONF_FILE}"
+                echo "ram=\"256M\"" >> "${CONF_FILE}"
+                ;;
+            kolibrios)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}"
+                echo "disk_size=\"2G\"" >> "${CONF_FILE}"
+                echo "ram=\"128M\"" >> "${CONF_FILE}"
+                ;;
+            slint)
+                echo "disk_size=\"50G\"" >> "${CONF_FILE}"
+                ;;
+            slitaz)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}"
+                echo "disk_size=\"4G\"" >> "${CONF_FILE}"
+                echo "ram=\"512M\"" >> "${CONF_FILE}"
+                ;;
+            ubuntu-server)
+                # 22.04+ fails on LVM build if disk size is < 10G
+                # 22.04.1 fails on auto-install if TPM is disabled
+                echo "disk_size=\"10G\"" >> "${CONF_FILE}"
+                echo "ram=\"4G\"" >> "${CONF_FILE}"
+                if [[ "${RELEASE}" == *"22.04"* ]]; then
+                    echo "tpm=\"on\"" >> "${CONF_FILE}"
+                fi
+                ;;
+            vanillaos)
+                ## Minimum is 50G for abroot, but a 64GB is allocated to give some headroom
+                echo "disk_size=\"64G\"" >> "${CONF_FILE}"
+                ;;
+            zorin)
+                case ${EDITION} in
+                    education64|edulite64) echo "disk_size=\"32G\"" >> "${CONF_FILE}";;
+                esac;;
+            reactos)
+                echo "boot=\"legacy\"" >> "${CONF_FILE}"
+                echo "disk_size=\"12G\"" >> "${CONF_FILE}"
+                echo "ram=\"2048M\"" >> "${CONF_FILE}"
+                ;;
+            macos)
+                echo "disk_size=\"128G\"" >> "${CONF_FILE}"
+                echo "macos_release=\"${RELEASE}\"" >> "${CONF_FILE}"
+                # https://github.com/quickemu-project/quickemu/issues/438
+                if [ "${RELEASE}" == "monterey" ]; then
+                    echo "cpu_cores=2" >> "${CONF_FILE}"
+                fi
+                ;;
+            elementary)
+                case "${RELEASE}" in
+                    8.1)
+                        echo "display=\"spice\"" >> "${CONF_FILE}"
+                        ;;
+                esac
+                ;;
+            proxmox-ve)
+                echo "disk_size=\"20G\"" >> "${CONF_FILE}"
+                echo "ram=\"4G\"" >> "${CONF_FILE}"
+                ;;
+        esac
 
             if [ "${OS}" == "ubuntu" ] && [[ ${RELEASE} == *"daily"*  ]]; then
                 # Minimum to install lobster testing is 18GB but 32GB are allocated for headroom
@@ -3906,23 +3913,23 @@ Advanced usage:
   quickget --download ubuntu 22.04
 
 Arguments:
-   --arch          <arch>                   : Set architecture (arm64, aarch64, amd64, x86_64)
-   --download      <os> <release> [edition] : Download image; no VM configuration
-   --create-config <os> [path/url] [flags]  : Create VM config for an OS image
-   --open-homepage <os>                     : Open homepage for the OS
-   --show          [os]                     : Show OS information
-   --version                                : Show version
-   --help                                   : Show this help message
+   --arch           <arch>                    : Set architecture (arm64, aarch64, amd64, x86_64)
+   --download       <os> <release> [edition]  : Download image; no VM configuration
+   --create-config  <os> [path/url] [flags]   : Create VM config for an OS image
+   --open-homepage  <os>                      : Open homepage for the OS
+   --show           [os]                      : Show OS information
+   --version                                  : Show version
+   --help                                     : Show this help message
 ------------------------------------ Flags -------------------------------------
 --create-config:
-  --disable-unattended                     : Force quickget not to set up an unattended installation
+  --disable-unattended                        : Force quickget not to set up an unattended installation
 -------------------------- For testing & development ---------------------------
-  --url           [os] [release] [edition] : Show image URL(s)
-  --check         [os] [release] [edition] : Check image URL(s)
-  --check-all-arch [os] [release] [edition]: Check downloads for all architectures (amd64 and arm64)
-  --list                                   : List all supported systems
-  --list-csv                               : List everything in csv format
-  --list-json                              : List everything in json format
+   --url            [os] [release] [edition]  : Show image URL(s)
+   --check          [os] [release] [edition]  : Check image URL(s)
+   --check-all-arch [os] [release] [edition]  : Check downloads for all architectures (amd64 and arm64)
+   --list                                     : List all supported systems
+   --list-csv                                 : List everything in csv format
+   --list-json                                : List everything in json format
 --------------------------------------------------------------------------------
 
 Supported Operating Systems:\n\n' "$(${QUICKEMU} --version)" "${CURL_VERSION}"
